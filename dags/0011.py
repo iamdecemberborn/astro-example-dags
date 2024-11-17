@@ -75,6 +75,13 @@ def create_and_read_csv111():
 
         current_path = os.getcwd()
         print("Current Path:", current_path)
+        parent_path = os.path.dirname(current_path)
+        print("Parent Path:", parent_path)
+        grandparent_path = os.path.dirname(parent_path)
+        print("Grandparent Path:", grandparent_path)
+        contents = os.listdir(current_path)
+        print("Contents of Current Path:", contents)
+
 
 
 
