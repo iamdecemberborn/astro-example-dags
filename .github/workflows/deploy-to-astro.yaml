@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       deploymentId:
-        description: "Deployment ID"
+        description: "cm3jcbtvh0rrb01pk97u196sm"
         required: true
         type: string
       apiToken:
-        description: "Astro API Token"
+        description: "eyJhbGciOiJSUzI1NiIsImtpZCI6ImNsb2Q0aGtqejAya3AwMWozdWNqbzJwOHIiLCJ0eXAiOiJKV1QifQ.eyJhcGlUb2tlbklkIjoiY20zamFyaHVsMHIwdjAxcTc3NTZwc3VmbCIsImF1ZCI6ImFzdHJvbm9tZXItZWUiLCJpYXQiOjE3MzE3MDg4OTMsImlzQXN0cm9ub21lckdlbmVyYXRlZCI6dHJ1ZSwiaXNJbnRlcm5hbCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vYXBpLmFzdHJvbm9tZXIuaW8iLCJraWQiOiJjbG9kNGhranowMmtwMDFqM3Vjam8ycDhyIiwicGVybWlzc2lvbnMiOlsiYXBpVG9rZW5JZDpjbTNqYXJodWwwcjB2MDFxNzc1NnBzdWZsIiwid29ya3NwYWNlSWQ6Y20zajhsa2ozMHJmZTAxbzZyYm9tY29kMiIsIm9yZ2FuaXphdGlvbklkOmNtM2o4bGl6dzByZjcwMW82YTlzZnN0NHYiLCJvcmdTaG9ydE5hbWU6Y20zajhsaXp3MHJmNzAxbzZhOXNmc3Q0diJdLCJzY29wZSI6ImFwaVRva2VuSWQ6Y20zamFyaHVsMHIwdjAxcTc3NTZwc3VmbCB3b3Jrc3BhY2VJZDpjbTNqOGxrajMwcmZlMDFvNnJib21jb2QyIG9yZ2FuaXphdGlvbklkOmNtM2o4bGl6dzByZjcwMW82YTlzZnN0NHYgb3JnU2hvcnROYW1lOmNtM2o4bGl6dzByZjcwMW82YTlzZnN0NHYiLCJzdWIiOiJjbTNqOGlqOTkwcWt4MDFxN3AwNnlpaGtyIiwidmVyc2lvbiI6ImNtM2phcmh1bDByMHUwMXE3Y2R2cXIyNWwifQ.Hd7DgZ_y7W6IOaNQpcDRrzvOdpcsfYbvzjhf9jO73hfPPaWn_yW3W72PKx6qX7ktKpIhKzM43IX-AlcMI_24faxV7lqOYGWwu5Uk2IaedhOK5oWyX3jElvmBXqg98jTuUcsIZ-go8W2VbKVCmmvGQ52t5_N1ad5_d7GYeNu_JxozPH9q_XzepSDQjPh08tEd7_-RoQco9BaFsTqMNspBDyReXZoq460sSzuHRxlEdneQmfbAYbsYwZMGJqlsnOBVgmpP4nuAuKV3QDbK6CrI6saTF_U6rL6_O-LajsLMf5OoqaPyNR8M_nRKlHu8L24KxZHmDZbqdpBNCvt-sH6xhQ"
         required: true
         type: string
   push:
