@@ -1,5 +1,5 @@
 """
-## Example DAG: Create and Read CSV File
+## Example DAG: Create and Read CSV File with Logging
 
 This DAG demonstrates creating a CSV file and reading it in a subsequent task.
 It uses Airflow's TaskFlow API to define Python-based tasks and manage dependencies.
@@ -10,6 +10,7 @@ reads the file and prints its contents.
 """
 
 import csv
+import logging
 from airflow.decorators import dag, task
 from pendulum import datetime
 import os
@@ -17,13 +18,16 @@ import os
 # Define default arguments for the DAG
 default_args = {"owner": "Airflow", "retries": 2}
 
+# Set up logging
+logger = logging.getLogger("airflow.task")
+
 # Define the DAG
 @dag(
     start_date=datetime(2024, 1, 1),
     schedule="@daily",
     catchup=False,
     default_args=default_args,
-    tags=["example", "csv"],
+    tags=["example", "csv", "logging"],
     doc_md=__doc__,
 )
 def create_and_read_csv():
@@ -42,12 +46,17 @@ def create_and_read_csv():
             [3, "Charlie", 35],
         ]
 
+        # Log the start of the task
+        logger.info("Starting to create CSV file.")
+
         with open(file_path, mode="w", newline="") as file:
             writer = csv.writer(file)
             writer.writerow(header)
             writer.writerows(rows)
 
-        print(f"CSV file created at {file_path}")
+        # Log file creation
+        logger.info(f"CSV file created successfully at {file_path}")
+        logger.info(f"File contents: Header: {header}, Rows: {rows}")
         return file_path
 
     # Task to read the CSV file and print its contents
@@ -56,13 +65,19 @@ def create_and_read_csv():
         """
         Read the created CSV file and print its contents.
         """
+        logger.info(f"Starting to read CSV file from {file_path}")
+
         if not os.path.exists(file_path):
+            logger.error(f"CSV file not found at {file_path}")
             raise FileNotFoundError(f"CSV file not found at {file_path}")
 
         with open(file_path, mode="r") as file:
             reader = csv.reader(file)
+            logger.info("CSV file contents:")
             for row in reader:
-                print(row)
+                logger.info(row)
+
+        logger.info(f"Finished reading CSV file from {file_path}")
 
     # Define the dependencies
     file_path = create_csv()
