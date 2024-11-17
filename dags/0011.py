@@ -30,6 +30,7 @@ logger = logging.getLogger("airflow.task")
     tags=["example", "csv", "logging"],
     doc_md=__doc__,
 )
+
 def create_and_read_csv():
 
     # Task to create a CSV file
