@@ -1,82 +1,73 @@
 """
-## Astronaut ETL example DAG
+## Example DAG: Create and Read CSV File
 
-This DAG queries the list of astronauts currently in space from the
-Open Notify API and prints each astronaut's name and flying craft.
+This DAG demonstrates creating a CSV file and reading it in a subsequent task.
+It uses Airflow's TaskFlow API to define Python-based tasks and manage dependencies.
 
-There are two tasks, one to get the data from the API and save the results,
-and another to print the results. Both tasks are written in Python using
-Airflow's TaskFlow API, which allows you to easily turn Python functions into
-Airflow tasks, and automatically infer dependencies and pass data.
+The first task creates a CSV file with some sample data, and the second task
+reads the file and prints its contents.
 
-The second task uses dynamic task mapping to create a copy of the task for
-each Astronaut in the list retrieved from the API. This list will change
-depending on how many Astronauts are in space, and the DAG will adjust
-accordingly each time it runs.
-
-For more explanation and getting started instructions, see our Write your
-first DAG tutorial: https://docs.astronomer.io/learn/get-started-with-airflow
-
-![Picture of the ISS](https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2010/02/space_station_over_earth/10293696-3-eng-GB/Space_Station_over_Earth_card_full.jpg)
 """
 
-from airflow import Dataset
+import csv
 from airflow.decorators import dag, task
 from pendulum import datetime
-import requests
-import logging
+import os
 
-#Define the basic parameters of the DAG, like schedule and start_date
+# Define default arguments for the DAG
+default_args = {"owner": "Airflow", "retries": 2}
+
+# Define the DAG
 @dag(
     start_date=datetime(2024, 1, 1),
     schedule="@daily",
     catchup=False,
+    default_args=default_args,
+    tags=["example", "csv"],
     doc_md=__doc__,
-    default_args={"owner": "Astro", "retries": 3},
-    tags=["example"],
 )
-def example_astronautsanuj():
-    #Define tasks
-    @task(
-        #Define a dataset outlet for the task. This can be used to schedule downstream DAGs when this task has run.
-        outlets=[Dataset("current_astronauts")]
-    )  # Define that this task updates the `current_astronauts` Dataset
-    def get_astronauts(**context) -> list[dict]:
-        """
-        This task uses the requests library to retrieve a list of Astronauts
-        currently in space. The results are pushed to XCom with a specific key
-        so they can be used in a downstream pipeline. The task returns a list
-        of Astronauts to be used in the next task.
-        """
-        r = requests.get("http://api.open-notify.org/astros.json")
-        logging.info(f"this is r that is  requests  {r}")
-        number_of_people_in_space = r.json()["number"]
-        logging.info("")
-        list_of_people_in_space = r.json()["people"]
+def create_and_read_csv():
 
-        context["ti"].xcom_push(
-            key="number_of_people_in_space", value=number_of_people_in_space
-        )
-        return list_of_people_in_space
-
+    # Task to create a CSV file
     @task
-    def print_astronaut_craft(greeting: str, person_in_space: dict) -> None:
+    def create_csv():
         """
-        This task creates a print statement with the name of an
-        Astronaut in space and the craft they are flying on from
-        the API request results of the previous task, along with a
-        greeting which is hard-coded in this example.
+        Create a CSV file with sample data.
         """
-        craft = person_in_space["craft"]
-        name = person_in_space["name"]
+        file_path = "/tmp/sample_data.csv"
+        header = ["id", "name", "age"]
+        rows = [
+            [1, "Alice", 30],
+            [2, "Bob", 25],
+            [3, "Charlie", 35],
+        ]
 
-        print(f"{name} is currently in space flying on the {craft}! {greeting}")
+        with open(file_path, mode="w", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow(header)
+            writer.writerows(rows)
 
-    #Use dynamic task mapping to run the print_astronaut_craft task for each
-    #Astronaut in space
-    print_astronaut_craft.partial(greeting="Hello! :)").expand(
-        person_in_space=get_astronauts() #Define dependencies using TaskFlow API syntax
-    )
+        print(f"CSV file created at {file_path}")
+        return file_path
 
-#Instantiate the DAG
-example_astronautsanuj()
+    # Task to read the CSV file and print its contents
+    @task
+    def read_csv(file_path: str):
+        """
+        Read the created CSV file and print its contents.
+        """
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f"CSV file not found at {file_path}")
+
+        with open(file_path, mode="r") as file:
+            reader = csv.reader(file)
+            for row in reader:
+                print(row)
+
+    # Define the dependencies
+    file_path = create_csv()
+    read_csv(file_path)
+
+
+# Instantiate the DAG
+create_and_read_csv()
