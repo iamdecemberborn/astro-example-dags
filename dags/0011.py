@@ -53,7 +53,6 @@ logger = logging.getLogger("airflow.task")
 
 def create_and_read_csv111():
 
-import os
 
     # Get the current working directory
     current_path = os.getcwd()
