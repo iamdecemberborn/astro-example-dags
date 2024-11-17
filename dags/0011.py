@@ -23,7 +23,7 @@ first DAG tutorial: https://docs.astronomer.io/learn/get-started-with-airflow
 from airflow import Dataset
 from airflow.decorators import dag, task
 from pendulum import datetime
-import requests
+import requests import loggin
 
 #Define the basic parameters of the DAG, like schedule and start_date
 @dag(
@@ -34,7 +34,7 @@ import requests
     default_args={"owner": "Astro", "retries": 3},
     tags=["example"],
 )
-def example_astronauts0022():
+def example_astronautsanuj():
     #Define tasks
     @task(
         #Define a dataset outlet for the task. This can be used to schedule downstream DAGs when this task has run.
@@ -48,6 +48,7 @@ def example_astronauts0022():
         of Astronauts to be used in the next task.
         """
         r = requests.get("http://api.open-notify.org/astros.json")
+
         number_of_people_in_space = r.json()["number"]
         list_of_people_in_space = r.json()["people"]
 
@@ -76,4 +77,4 @@ def example_astronauts0022():
     )
 
 #Instantiate the DAG
-example_astronauts0022()
+example_astronautsanuj()
