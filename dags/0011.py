@@ -54,43 +54,14 @@ logger = logging.getLogger("airflow.task")
 def create_and_read_csv111():
 
 
-    # Get the current working directory
-    current_path = os.getcwd()
-    print("Current Path:", current_path)
 
-    # Navigate to the parent folder
-    parent_path = os.path.dirname(current_path)
-    print("Parent Path:", parent_path)
-
-    # Navigate to the grandparent folder
-    grandparent_path = os.path.dirname(parent_path)
-    print("Grandparent Path:", grandparent_path)
-
-    # List all directories and files in the current path
-    contents_current = os.listdir(current_path)
-    print("Contents of Current Path:", contents_current)
-
-    # List all directories and files in the parent path
-    contents_parent = os.listdir(parent_path) if os.path.exists(parent_path) else []
-    print("Contents of Parent Path:", contents_parent)
-
-    # List all directories and files in the grandparent path
-    contents_grandparent = os.listdir(grandparent_path) if os.path.exists(grandparent_path) else []
-    print("Contents of Grandparent Path:", contents_grandparent)
 
 
     # Task to create a CSV file
     @task
     def create_csv():
 
-        current_path = os.getcwd()
-        print("Current Path:", current_path)
-        parent_path = os.path.dirname(current_path)
-        print("Parent Path:", parent_path)
-        grandparent_path = os.path.dirname(parent_path)
-        print("Grandparent Path:", grandparent_path)
-        contents = os.listdir(current_path)
-        print("Contents of Current Path:", contents)
+
 
 
         # Get the current working directory
