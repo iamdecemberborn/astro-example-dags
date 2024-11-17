@@ -72,6 +72,13 @@ def create_and_read_csv111():
     # Task to create a CSV file
     @task
     def create_csv():
+
+        current_path = os.getcwd()
+        print("Current Path:", current_path)
+
+
+
+
         """
         Create a CSV file with sample data.
         """
