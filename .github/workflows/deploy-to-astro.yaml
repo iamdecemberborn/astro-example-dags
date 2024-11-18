@@ -1,32 +1,35 @@
-name: Astronomer CI - Deploy code
+name: Astronomer CI - Deploy DAGs
 
 on:
   workflow_dispatch:
     inputs:
-      deploymentId:
-        description: "Deployment ID"
-        required: true
-        type: string
       apiToken:
-        description: "Astro API Token"
-        required: true
+        description: "Astro API Token (optional, falls back to secret)"
+        required: false
+        type: string
+      deploymentId:
+        description: "Deployment ID (optional, falls back to secret)"
+        required: false
         type: string
   push:
     branches:
       - main
-      - dev
-      - feature/*
 
 env:
   ASTRO_API_TOKEN: ${{ inputs.apiToken || secrets.ASTRO_API_TOKEN }}
   DEPLOYMENT_ID: ${{ inputs.deploymentId || secrets.DEPLOYMENT_ID }}
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Validate Inputs
         run: |
+          echo "Checking environment variables..."
           if [ -z "${{ env.ASTRO_API_TOKEN }}" ]; then
             echo "Error: ASTRO_API_TOKEN is not set."
             exit 1
@@ -35,20 +38,10 @@ jobs:
             echo "Error: DEPLOYMENT_ID is not set."
             exit 1
           fi
+          echo "Environment variables validated successfully."
 
-      - name: Deploy to Astro
+      - name: Deploy to Astronomer
         uses: astronomer/deploy-action@v0.4
         with:
           deployment_id: ${{ env.DEPLOYMENT_ID }}
           api_key: ${{ env.ASTRO_API_TOKEN }}
-          force_deploy: true  # Optional
-
-      - name: Notify on Success
-        if: success()
-        run: echo "Deployment to Astronomer successful!"
-
-      - name: Notify on Failure
-        if: failure()
-        run: echo "Deployment to Astronomer failed!"
-
-
