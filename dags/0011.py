@@ -42,7 +42,7 @@ logger = logging.getLogger("airflow.task")
     tags=["example", "csv", "logging"],
     doc_md=__doc__,
 )
-def create_and_read_csv11111():
+def create_and_read_csv():
     # Task to create a CSV file
     @task
     def create_csv():
@@ -126,6 +126,6 @@ def create_and_read_csv11111():
 
 
 # Instantiate the DAG
-create_and_read_csv11111()
+create_and_read_csv()
 
 
