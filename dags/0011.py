@@ -14,17 +14,14 @@ import logging
 from airflow.decorators import dag, task
 from pendulum import datetime
 import os
-
 import os
 
 # Get the current working directory
 current_path = os.getcwd()
 print("Current Path:", current_path)
-
 # Navigate to the parent folder
 parent_path = os.path.dirname(current_path)
 print("Parent Path:", parent_path)
-
 # Navigate to the grandparent folder
 grandparent_path = os.path.dirname(parent_path)
 print("Grandparent Path:", grandparent_path)
@@ -32,15 +29,10 @@ print("Grandparent Path:", grandparent_path)
 # List all directories and files in the current path
 contents = os.listdir(current_path)
 print("Contents of Current Path:", contents)
-
-
-
 # Define default arguments for the DAG
 default_args = {"owner": "Airflow", "retries": 2}
-
 # Set up logging
 logger = logging.getLogger("airflow.task")
-
 # Define the DAG
 @dag(
     start_date=datetime(2024, 1, 1),
@@ -50,19 +42,10 @@ logger = logging.getLogger("airflow.task")
     tags=["example", "csv", "logging"],
     doc_md=__doc__,
 )
-
 def create_and_read_csv11111():
-
-
-
-
-
     # Task to create a CSV file
     @task
     def create_csv():
-
-
-
 
         # Get the current working directory
         current_path = os.getcwd()
@@ -135,7 +118,7 @@ def create_and_read_csv11111():
             for row in reader:
                 logger.info(row)
 
-        logger.info(f"Finished reading CSV file from {file_path}")
+        logger.info(f"Finished reading CSV file from hgvgvg {file_path}")
 
     # Define the dependencies
     file_path = create_csv()
